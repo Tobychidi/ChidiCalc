@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChidiCalc.io</title>
+
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <header>
+        <h1>ChidiCalc.io</h1>
+    </header>
+    <main>
+        <div class="oga">
+            <div id="calcScreen">
+                <p id="input" class="active"></p>
+                <p id="answer">0</p>
+            </div>
+            <div id="calcButtons">
+                <button id="clear" class="masters" onclick="clearAll()">C</button>
+                <button id="divide" class="operators">&divide;</button>
+                <button id="7" class="numbers">7</button>
+                <button id="8" class="numbers">8</button>
+                <button id="9" class="numbers">9</button>
+                <button id="times" class="operators">&times;</button>
+                <button id="4" class="numbers">4</button>
+                <button id="5" class="numbers">5</button>
+                <button id="6" class="numbers">6</button>
+                <button id="minus" class="operators">-</button>
+                <button id="1" class="numbers">1</button>
+                <button id="2" class="numbers">2</button>
+                <button id="3" class="numbers">3</button>
+                <button id="plus" class="operators">+</button>
+                <button id="0" class="numbers zero">0</button>
+                <button id="calc" class="masters" onclick="calc()">=</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>Designed By: Toby Chidi &copy; 2020 </p>
+    </footer>
+
+    <script>
+        let koko = "koko"
+        let negated = "negated"
+        let a, b, c, operator, d, e = 0,
+            solved;
+        a = koko;
+        b = koko;
+        c = koko;
+        operator = koko;
+
+        let inputScrn = document.getElementById("input")
+        let answerScrn = document.getElementById("answer")
+
+
+        function changescrn(state) {
+            solved = state;
+            if (solved == true) {
+                inputScrn.classList.add("inactive")
+            } else {
+                inputScrn.classList.remove("inactive")
+            }
+        }
+
+        function display(me) {
+            let text = document.createTextNode(me)
+            inputScrn.appendChild(text)
+        }
+
+        function clrDisplay(me) {
+            inputScrn.innerHTML = ""
+            let text = document.createTextNode(me)
+            inputScrn.appendChild(text)
+        }
+
+        function calc() {
+            changescrn(true)
+            e = b
+            if (b == koko || b == negated) {
+                e = 0
+            }
+            if (operator != koko) {
+                switch (operator) {
+                    case "plus":
+                        d = (a * 1) + (e * 1);
+                        break;
+                    case "minus":
+                        d = (a * 1) - (e * 1);
+                        break;
+                    case "times":
+                        d = (a * 1) * (e * 1);
+                        break;
+                    case "divide":
+                        d = (a * 1) / (e * 1);
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                d = a * 1
+            }
+            answerScrn.innerHTML = `= ${d}`
+        }
+
+        function clearAll() {
+            changescrn(false)
+            a = koko;
+            b = koko;
+            c = koko;
+            operator = koko;
+            inputScrn.innerHTML = ""
+            answerScrn.innerHTML = "0"
+        }
+        let numbers = document.getElementsByClassName("numbers")
+        let operators = document.getElementsByClassName("operators")
+
+        for (let x = 0; x < numbers.length; x++) {
+            const el = numbers[x];
+            el.onclick = () => {
+                changescrn(false)
+                if (operator == koko && (a == koko || a == negated)) {
+                    if (a == koko) {
+                        a = el.id
+                        display(a)
+                    } else if (a == negated) {
+                        a = el.id * -1
+                        display(a * -1)
+                    }
+                } else if ((a != koko && a != negated) && operator == koko) {
+                    a = a + el.id
+                    clrDisplay(a)
+                    // console.log(a)
+                }
+                if ((a != koko && a != negated) && operator != koko) {
+                    if (b == koko) {
+                        b = el.id
+                        display(b)
+                    } else if (b == negated) {
+                        b = el.id * -1
+                        display(b * -1)
+                    } else {
+                        b = b + el.id
+                        clrDisplay(a + c + b)
+                    }
+                }
+            }
+        }
+
+        for (let x = 0; x < operators.length; x++) {
+            const el = operators[x];
+            el.onclick = () => {
+                changescrn(false)
+                switch (el.id) {
+                    case "plus":
+                        if (a != koko) {
+                            c = " + "
+                            clrDisplay(a + c)
+                        }
+                        break;
+                    case "minus":
+                            c = " - "
+                            display(c)
+                        break;
+                    case "times":
+                        if (a != koko) {
+                            c = " * "
+                            clrDisplay(a + c)
+                        }
+                        break;
+                    case "divide":
+                        if (a != koko) {
+                            c = " / "
+                            clrDisplay(a + c)
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                if ((a != koko && a != negated) && (b != koko && b != negated) && operator != koko) {
+                    switch (operator) {
+                        case "plus":
+                            a = (a * 1) + (b * 1);
+                            clrDisplay(a + c)
+                            b = koko;
+                            break;
+                        case "minus":
+                            a = (a * 1) - (b * 1);
+                            clrDisplay(a + c)
+                            b = koko;
+                            break;
+                        case "times":
+                            a = (a * 1) * (b * 1);
+                            clrDisplay(a + c)
+                            b = koko;
+                            break;
+                        case "divide":
+                            a = (a * 1) / (b * 1);
+                            clrDisplay(a + c)
+                            b = koko;
+                            break;
+                        default:
+                            break;
+                    }
+                    // operator = koko
+                } else if ((a != koko && a != negated) && b == koko && operator != koko) {
+                    if (el.id == "minus") {
+                        b = negated
+                    }
+                } else if ((a != koko && a != negated) && b == negated && operator != koko) {
+                    if (el.id == "minus") {
+                        b = koko
+                        if (operator != "minus") {
+                            clrDisplay(a + c)
+                        }
+                    }
+                }
+
+                if (a == koko && operator == koko) {
+                    if (el.id == "minus") {
+                        a = negated
+                    }
+                } else if (a == negated && operator == koko) {
+                    a = koko
+                }
+                if ((a != koko && a != negated) && b == koko) {
+                    // c = a
+                    operator = el.id
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
