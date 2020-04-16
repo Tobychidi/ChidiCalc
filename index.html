@@ -21,6 +21,9 @@
             </div>
             <div id="calcButtons">
                 <button id="clear" class="masters" onclick="clearAll()">C</button>
+                <button id="backspace">
+                    <svg><use xlink:href="#backspace-icon"></use></svg>
+                </button>
                 <button id="divide" class="operators">&divide;</button>
                 <button id="7" class="numbers">7</button>
                 <button id="8" class="numbers">8</button>
@@ -34,6 +37,7 @@
                 <button id="2" class="numbers">2</button>
                 <button id="3" class="numbers">3</button>
                 <button id="plus" class="operators">+</button>
+                <button id="." class="numbers">.</button>
                 <button id="0" class="numbers zero">0</button>
                 <button id="calc" class="masters" onclick="calc()">=</button>
             </div>
@@ -42,198 +46,15 @@
     <footer>
         <p>Designed By: Toby Chidi &copy; 2020 </p>
     </footer>
-
-    <script>
-        let koko = "koko"
-        let negated = "negated"
-        let a, b, c, operator, d, e = 0,
-            solved;
-        a = koko;
-        b = koko;
-        c = koko;
-        operator = koko;
-
-        let inputScrn = document.getElementById("input")
-        let answerScrn = document.getElementById("answer")
-
-
-        function changescrn(state) {
-            solved = state;
-            if (solved == true) {
-                inputScrn.classList.add("inactive")
-            } else {
-                inputScrn.classList.remove("inactive")
-            }
-        }
-
-        function display(me) {
-            let text = document.createTextNode(me)
-            inputScrn.appendChild(text)
-        }
-
-        function clrDisplay(me) {
-            inputScrn.innerHTML = ""
-            let text = document.createTextNode(me)
-            inputScrn.appendChild(text)
-        }
-
-        function calc() {
-            changescrn(true)
-            e = b
-            if (b == koko || b == negated) {
-                e = 0
-            }
-            if (operator != koko) {
-                switch (operator) {
-                    case "plus":
-                        d = (a * 1) + (e * 1);
-                        break;
-                    case "minus":
-                        d = (a * 1) - (e * 1);
-                        break;
-                    case "times":
-                        d = (a * 1) * (e * 1);
-                        break;
-                    case "divide":
-                        d = (a * 1) / (e * 1);
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                d = a * 1
-            }
-            answerScrn.innerHTML = `= ${d}`
-        }
-
-        function clearAll() {
-            changescrn(false)
-            a = koko;
-            b = koko;
-            c = koko;
-            operator = koko;
-            inputScrn.innerHTML = ""
-            answerScrn.innerHTML = "0"
-        }
-        let numbers = document.getElementsByClassName("numbers")
-        let operators = document.getElementsByClassName("operators")
-
-        for (let x = 0; x < numbers.length; x++) {
-            const el = numbers[x];
-            el.onclick = () => {
-                changescrn(false)
-                if (operator == koko && (a == koko || a == negated)) {
-                    if (a == koko) {
-                        a = el.id
-                        display(a)
-                    } else if (a == negated) {
-                        a = el.id * -1
-                        display(a * -1)
-                    }
-                } else if ((a != koko && a != negated) && operator == koko) {
-                    a = a + el.id
-                    clrDisplay(a)
-                    // console.log(a)
-                }
-                if ((a != koko && a != negated) && operator != koko) {
-                    if (b == koko) {
-                        b = el.id
-                        display(b)
-                    } else if (b == negated) {
-                        b = el.id * -1
-                        display(b * -1)
-                    } else {
-                        b = b + el.id
-                        clrDisplay(a + c + b)
-                    }
-                }
-            }
-        }
-
-        for (let x = 0; x < operators.length; x++) {
-            const el = operators[x];
-            el.onclick = () => {
-                changescrn(false)
-                switch (el.id) {
-                    case "plus":
-                        if (a != koko) {
-                            c = " + "
-                            clrDisplay(a + c)
-                        }
-                        break;
-                    case "minus":
-                            c = " - "
-                            display(c)
-                        break;
-                    case "times":
-                        if (a != koko) {
-                            c = " * "
-                            clrDisplay(a + c)
-                        }
-                        break;
-                    case "divide":
-                        if (a != koko) {
-                            c = " / "
-                            clrDisplay(a + c)
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                if ((a != koko && a != negated) && (b != koko && b != negated) && operator != koko) {
-                    switch (operator) {
-                        case "plus":
-                            a = (a * 1) + (b * 1);
-                            clrDisplay(a + c)
-                            b = koko;
-                            break;
-                        case "minus":
-                            a = (a * 1) - (b * 1);
-                            clrDisplay(a + c)
-                            b = koko;
-                            break;
-                        case "times":
-                            a = (a * 1) * (b * 1);
-                            clrDisplay(a + c)
-                            b = koko;
-                            break;
-                        case "divide":
-                            a = (a * 1) / (b * 1);
-                            clrDisplay(a + c)
-                            b = koko;
-                            break;
-                        default:
-                            break;
-                    }
-                    // operator = koko
-                } else if ((a != koko && a != negated) && b == koko && operator != koko) {
-                    if (el.id == "minus") {
-                        b = negated
-                    }
-                } else if ((a != koko && a != negated) && b == negated && operator != koko) {
-                    if (el.id == "minus") {
-                        b = koko
-                        if (operator != "minus") {
-                            clrDisplay(a + c)
-                        }
-                    }
-                }
-
-                if (a == koko && operator == koko) {
-                    if (el.id == "minus") {
-                        a = negated
-                    }
-                } else if (a == negated && operator == koko) {
-                    a = koko
-                }
-                if ((a != koko && a != negated) && b == koko) {
-                    // c = a
-                    operator = el.id
-                }
-            }
-        }
-    </script>
+    <svg style="display: none;">
+        <symbol id="backspace-icon" viewBox="0 0 512 512">
+            <path
+                d="M490.667 64h-357.59a21.333 21.333 0 0 0-17.848 9.647L3.485 244.314a21.334 21.334 0 0 0 0 23.372l111.744 170.667A21.333 21.333 0 0 0 133.077 448h357.589c11.782 0 21.333-9.551 21.333-21.333V85.333C512 73.551 502.449 64 490.667 64zm-21.334 341.333H144.609L46.833 256l97.776-149.333h324.725v298.666z" />
+            <path
+                d="M198.246 356.418c8.331 8.331 21.839 8.331 30.17 0l70.248-70.248 70.248 70.248c8.331 8.331 21.839 8.331 30.17 0s8.331-21.839 0-30.17L328.834 256l70.248-70.248c8.331-8.331 8.331-21.839 0-30.17s-21.839-8.331-30.17 0l-70.248 70.248-70.248-70.248c-8.331-8.331-21.839-8.331-30.17 0-8.331 8.331-8.331 21.839 0 30.17L268.495 256l-70.248 70.248c-8.332 8.332-8.332 21.839-.001 30.17z" />
+        </symbol>
+    </svg>
+    <script src="script.js"></script>
 </body>
 
 </html>
